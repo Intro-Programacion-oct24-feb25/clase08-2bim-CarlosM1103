@@ -23,11 +23,18 @@ public class Principal1 {
         double promedioEstudiante;
         int numeroNotasArribaPromedio;
         int [] filaNotas;
+        int  notaAlta;
+        int  notaBaja;
+        String[] username = new String [8];
+        username = email(nombres,apellidos);
         String mensajeFinal = "";
         for (int i = 0; i < nombres.length; i++) {
+            
             nombre = nombres[i];
             apellido = apellidos[i];
             filaNotas = notas[i];
+            notaAlta = notaAlta(filaNotas);
+            notaBaja = notaBaja(filaNotas);
             promedioEstudiante = funcion01(filaNotas);
             numeroNotasArribaPromedio = funcion02(filaNotas, 
                     promedio_paralelo);
@@ -35,22 +42,59 @@ public class Principal1 {
             // Se guarda la informacion en una cadena, la cual se la puede presentar fuera del ciclo.
             mensajeFinal = String.format("%s%s\n", mensajeFinal, 
                     presentarReporte(nombre, apellido, tipoNotas, 
-                    promedioEstudiante, numeroNotasArribaPromedio));
+                    promedioEstudiante, numeroNotasArribaPromedio,username[i],notaAlta,notaBaja));
         }
-        // Sirve para crear un archivo de texto donde se guardará la información dada.
+        System.out.println(mensajeFinal);
+        // Sirve para crear un archivo de texto donde se guardará la información dada
         CrearArchivoTexto.agregarRegistros(mensajeFinal);
 
     }
     
+    public static int notaAlta ( int[] filaNotas) {
+        int Alta = filaNotas[0];
+         for(int i = 0; i < filaNotas.length;i++){
+             if (Alta > filaNotas[i])
+                 Alta = filaNotas[i];
+         }
+          
+        return Alta;
+    }
+    
+    public static int notaBaja ( int[] filaNotas) {
+        int Baja = filaNotas[0];
+         for(int i = 0; i < filaNotas.length;i++){
+             if (Baja < filaNotas[i])
+                 Baja = filaNotas[i];
+         }
+          
+        return Baja;
+    }
+    
+    
+    public static String[] email (String nombres[], String apellidos[] ){
+        String email[] = new String[8];
+        String inicial;
+        
+        for  (int i = 0;i < nombres.length;i++){
+            inicial = nombres[i].substring(0,1);
+            email[i] = inicial.toLowerCase()+"."+apellidos[i].toLowerCase()+"@utpl.edu.ec" ;
+        }
+            return email;
+        
+    }
+    
     public static String presentarReporte(String nom, String ap, String notas, 
-            double prom, int numeroNotas){
+            double prom, int numeroNotas,String username, int alta, int baja){
         String reporte = String.format("Nombres: %s\n"
                 + "Apellidos: %s\n"
+                + "Username: %s\n"
                 + "Con notas: \n"
                 + "%s\n"
                 + "Promedio - %2f\n"
-                + "Número de notas arriba del promedio: %d\n\n",
-                nom, ap, notas, prom, numeroNotas);
+                + "Número de notas arriba del promedio: %d\n\n"
+                + "Nota mas baja - %d\n"
+                + "Nota mas alta - %d\n",
+                nom, ap,username, notas, prom, numeroNotas,alta,baja);
         
         return reporte;
     }
